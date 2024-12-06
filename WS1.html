@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Women's Shirt 1 - Clothing Finders</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1, h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        header {
+        background-color: #333;
+        color: white;
+        padding: 20px;
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        flex-grow: 1; /* Makes the logo take up available space */
+    }
+
+    .my-cart-button {
+        background-color: #4c81af;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        font-size: 14px;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-weight: bold;
+        position: absolute; /* Keeps the button aligned to the right */
+        right: 20px; /* Aligns the button to the right edge */
+    }
+
+    .my-cart-button:hover {
+        background-color: #4c81af;
+    }
+
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-detail {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .product-image img {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .product-info h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-size: 24px;
+            color: #4c81af;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .sizes, .store-locations {
+            margin-bottom: 20px;
+        }
+
+        .sizes select, .store-locations select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #4c81af;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4c81af;
+        }
+
+        #availability-result {
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            font-size: 14px;
+            margin-top: 50px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+    <script>
+        function checkAvailability() {
+            const size = document.getElementById('size-select').value;
+            const location = document.getElementById('location-select').value;
+            const availabilityResult = document.getElementById('availability-result');
+            const addToCartButton = document.getElementById('add-to-cart');
+
+            if (!size || !location) {
+                availabilityResult.textContent = 'Please select both size and location.';
+                availabilityResult.style.color = 'red';
+                addToCartButton.disabled = true;
+                return;
+            }
+
+            // Simulate availability check
+            const stock = Math.floor(Math.random() * 10); // Random stock count between 0 and 9
+            if (stock > 0) {
+                availabilityResult.textContent = `Item is available. There are ${stock} left.`;
+                availabilityResult.style.color = 'blue';
+                addToCartButton.disabled = false;
+            } else {
+                availabilityResult.textContent = 'Sorry, the item is out of stock at this location.';
+                availabilityResult.style.color = 'red';
+                addToCartButton.disabled = true;
+            }
+        }
+
+        function addToCart() {
+            const size = document.getElementById('size-select').value;
+            const location = document.getElementById('location-select').value;
+
+            if (!size || !location) {
+                alert('Please select both size and location before reserving the item.');
+                return;
+            }
+
+            const item = {
+                name: "TANK",
+                price: 19.99,
+                size: size,
+                location: location,
+                image: "images/women shirt 1.png"
+            };
+
+            // Get the existing cart from localStorage
+            const cart = JSON.parse(localStorage.getItem('cartItems')) || [];
+            cart.push(item);
+            localStorage.setItem('cartItems', JSON.stringify(cart));
+
+            alert(`Item reserved successfully!\nSize: ${size}\nLocation: ${location}`);
+            // Redirect to MyCart.html
+            window.location.href = "MyCart.html";
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="home.html" class="logo">Clothing Finders</a>
+            <a href="MyCart.html" class="my-cart-button">My Reserves</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="product-detail">
+            <div class="product-image">
+                <img src="images/women shirt 1.png" alt="TANK">
+            </div>
+            <div class="product-info">
+                <h2>TANK</h2>
+                <p class="price">$19.99</p>
+                <div class="sizes">
+                    <h3>Choose Your Size:</h3>
+                    <select id="size-select">
+                        <option value="">Select Size</option>
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                    </select>
+                </div>
+                <div class="store-locations">
+                    <h3>Choose Your Location:</h3>
+                    <select id="location-select">
+                        <option value="">Select Location</option>
+                        <option value="New York">New York</option>
+                        <option value="Miami">Miami</option>
+                        <option value="Los Angeles">Los Angeles</option>
+                        <option value="Chicago">Chicago</option>
+                    </select>
+                </div>
+                <button id="check-availability" onclick="checkAvailability()">Check Availability</button>
+                <div id="availability-result"></div>
+                <button id="add-to-cart" onclick="addToCart()" disabled>Reserve Item</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Clothing Finders</p>
+    </footer>
+</body>
+</html>
