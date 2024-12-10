@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Clothing Finders</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1, h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        header a {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .checkout-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .form-group input, 
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            resize: none;
+        }
+
+        .checkout-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #4c81af;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background-color: #4c81af;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+    <script>
+        function validateCheckoutForm(event) {
+            event.preventDefault(); // Prevent form submission for validation
+
+            let isValid = true;
+            const form = document.getElementById('checkout-form');
+            const errorMessages = document.querySelectorAll('.error');
+            errorMessages.forEach((error) => error.textContent = ''); // Clear previous errors
+
+            const fields = {
+                firstName: form['first-name'],
+                lastName: form['last-name'],
+                email: form['email'],
+                phone: form['phone'],
+                address: form['address'],
+                creditCard: form['credit-card'],
+                billingAddress: form['billing-address']
+            };
+
+            // Validation rules
+            if (!fields.firstName.value.trim()) {
+                isValid = false;
+                document.getElementById('first-name-error').textContent = 'First name is required.';
+            }
+            if (!fields.lastName.value.trim()) {
+                isValid = false;
+                document.getElementById('last-name-error').textContent = 'Last name is required.';
+            }
+            if (!fields.email.value.trim() || !/\S+@\S+\.\S+/.test(fields.email.value)) {
+                isValid = false;
+                document.getElementById('email-error').textContent = 'A valid email address is required.';
+            }
+            if (!fields.phone.value.trim() || !/^\d{10}$/.test(fields.phone.value)) {
+                isValid = false;
+                document.getElementById('phone-error').textContent = 'A valid 10-digit phone number is required.';
+            }
+            if (!fields.address.value.trim()) {
+                isValid = false;
+                document.getElementById('address-error').textContent = 'Shipping address is required.';
+            }
+            if (!fields.creditCard.value.trim() || !/^\d{16}$/.test(fields.creditCard.value)) {
+                isValid = false;
+                document.getElementById('credit-card-error').textContent = 'A valid 16-digit credit card number is required.';
+            }
+            if (!fields.billingAddress.value.trim()) {
+                isValid = false;
+                document.getElementById('billing-address-error').textContent = 'Billing address is required.';
+            }
+
+            if (isValid) {
+                alert('Checkout successful! Thank you for your order.');
+                form.reset();
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <a href="home.html">Clothing Finders</a>
+    </header>
+
+    <main>
+        <div class="checkout-container">
+            <h2>Checkout</h2>
+            <form id="checkout-form" onsubmit="validateCheckoutForm(event)">
+                <div class="form-group">
+                    <label for="first-name">First Name</label>
+                    <input type="text" id="first-name" name="first-name">
+                    <div id="first-name-error" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="last-name">Last Name</label>
+                    <input type="text" id="last-name" name="last-name">
+                    <div id="last-name-error" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email">
+                    <div id="email-error" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone">
+                    <div id="phone-error" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Shipping Address</label>
+                    <textarea id="address" name="address" rows="3"></textarea>
+                    <div id="address-error" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="credit-card">Credit Card Number</label>
+                    <input type="text" id="credit-card" name="credit-card">
+                    <div id="credit-card-error" class="error"></div>
+                </div>
+                <div class="form-group">
+                    <label for="billing-address">Billing Address</label>
+                    <textarea id="billing-address" name="billing-address" rows="3"></textarea>
+                    <div id="billing-address-error" class="error"></div>
+                </div>
+                <button type="submit" class="checkout-btn">Submit Order</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Clothing Finders</p>
+    </footer>
+</body>
+</html>

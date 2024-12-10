@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Clothing Finders</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1, h2 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative; 
+        }
+
+        header a {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .cart-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .item-image {
+            width: 70px;
+            border-radius: 8px;
+        }
+
+        /* Remove Button */
+        .remove-btn {
+            color: white;
+            background-color: red;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .remove-btn:hover {
+            background-color: darkred;
+        }
+
+        /* Checkout Button */
+        .checkout-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 15px 30px;
+            background-color: #4c81af;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background-color: #3a6d8c;
+        }
+
+        /* Empty Cart Message */
+        .empty-cart {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #888;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #333;
+            color: white;
+            margin-top: 50px;
+            font-size: 14px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+        </div>
+    </header>
+
+    <main>
+        <div class="cart-container">
+            <h2>Your Shopping Cart</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Image</th>
+                        <th>Item</th>
+                        <th>Size</th>
+                        <th>Location</th>
+                        <th>Price</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody id="cart-table-body">
+                </tbody>
+            </table>
+            <p id="empty-cart-message" class="empty-cart" style="display: none;">Your cart is empty.</p>
+        </div>
+        <button id="checkout-btn" class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Clothing Finders</p>
+    </footer>
+
+    <script>
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+        
+    
+
+    function displayCartItems() {
+        const cartTableBody = document.getElementById('cart-table-body');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        const checkoutButton = document.getElementById('checkout-btn');
+
+        cartTableBody.innerHTML = ''; // Clear table for re-rendering
+
+        if (cartItems.length === 0) {
+            emptyCartMessage.style.display = 'block';
+            checkoutButton.style.display = 'none';
+        } else {
+            emptyCartMessage.style.display = 'none';
+            checkoutButton.style.display = 'block';
+
+            cartItems.forEach((item, index) => {
+                // Parse price to ensure it's a number
+                const price = parseFloat(item.price) || 0; // Default to 0 if invalid
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><img src="${item.image}" alt="${item.name}" class="item-image"></td>
+                    <td>${item.name}</td>
+                    <td>${item.size}</td>
+                    <td>${item.location}</td>
+                    <td>$${price.toFixed(2)}</td>
+                    <td><button class="remove-btn" onclick="removeFromCart(${index})">X</button></td>
+                `;
+                cartTableBody.appendChild(row);
+            });
+        }
+    }
+
+    function removeFromCart(index) {
+        cartItems.splice(index, 1); // Remove the item at the specified index
+        localStorage.setItem('cartItems', JSON.stringify(cartItems)); // Update localStorage
+        displayCartItems(); // Re-render cart
+    }
+
+    function proceedToCheckout() {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+        if (cartItems.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        console.log(cartItems);
+        fetch('/Checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(cartItems),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Response from backend:", data); // Debug log
+                if (data.error) {
+                    alert(`Error: ${data.error}`);
+                } else {
+                    alert(data.message);
+                    //clear cart after successful checkout
+                    localStorage.removeItem('cartItems');
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error during checkout:', error);
+                alert('Failed to proceed to checkout!');
+            });
+    }
+
+
+
+    document.addEventListener('DOMContentLoaded', displayCartItems);
+
+
+    </script>
+</body>
+</html>
+
+
+
+ 
